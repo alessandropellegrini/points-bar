@@ -1,6 +1,6 @@
 const textWidth = require("./calc-text-width");
 
-module.exports = (points, percentage, label = 'Points', styleOptions = {}) => {
+module.exports = (points, maxPoints, percentage, label = 'Points', styleOptions = {}) => {
     const style = {
         fontFamily: 'Verdana, DejaVu Sans, sans-serif',
         fontColor: '#FFFFFF',
@@ -13,8 +13,8 @@ module.exports = (points, percentage, label = 'Points', styleOptions = {}) => {
     const labelWidth = textWidth(label) + 10;   // inc 5px padding either side
     const transform = (style.reverse) ? `scale(-1,1) translate(-${style.width - labelWidth},0)` : ``;
 
-    return `<svg xmlns="http://www.w3.org/2000/svg" width="${style.width}px" height="20px" role="img" aria-label="${label}: ${points}">
-    <title>${label}: ${points}</title>
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="${style.width}px" height="20px" role="img" aria-label="${label}: ${points}/${maxPoints}">
+    <title>${label}: ${points}/${maxPoints}</title>
     <linearGradient id="a" x2="0" y2="100%">
         <stop offset="0" stop-opacity=".1" stop-color="#EEE"/>
         <stop offset="1" stop-opacity=".1"/>
@@ -33,8 +33,8 @@ module.exports = (points, percentage, label = 'Points', styleOptions = {}) => {
     <g aria-hidden="true" font-size="11" font-family="${style.fontFamily}" fill="${style.fontColor}">
         <text x="6" y="15" fill="#000" opacity="0.25">${label}</text>
         <text x="5" y="14">${label}</text>
-        <text x="${style.width - 5}" y="15" fill="#000" opacity="0.25" text-anchor="end">${points}</text>
-        <text x="${style.width - 6}" y="14" text-anchor="end">${points}</text>
+        <text x="${style.width - 5}" y="15" fill="#000" opacity="0.25" text-anchor="end">${points}/${maxPoints}</text>
+        <text x="${style.width - 6}" y="14" text-anchor="end">${points}/${maxPoints}</text>
     </g>
 </svg>`
 }

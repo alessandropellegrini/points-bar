@@ -4,31 +4,6 @@
 const fs = require("fs");
 const path = require("path");
 
-// split points input into current points, max points parts. return as list of 2.
-function splitPoints(points) {
-
-    // throw error if points not string
-    if (typeof points !== 'string') {
-        throw new TypeError("Points input not a string");
-    }
-
-    const pointsParts = points.split("/");
-
-    // throw error if not 2 parts
-    if (pointsParts.length != 2) {
-        throw new Error("Points input incorrectly formatted")
-    }
-
-    // throw error if parts are not numbers
-    for (let part of pointsParts) {
-        if (isNaN(part)) {
-            throw new TypeError("Points part not a number");
-        }
-    }
-
-    return pointsParts;
-}
-
 // returns svg string
 function templateSVG(currentPoints, maxPoints, options = {}) {
     const type = options.type || 'default';
@@ -36,22 +11,22 @@ function templateSVG(currentPoints, maxPoints, options = {}) {
     const styleOptions = options.style || {};
     let svg = '';
 
-    const points = `${currentPoints}/${maxPoints}`;
     const percentage = Math.min(Math.floor((currentPoints / maxPoints) * 100), 100);
 
     // throw error if percentage not number
     if (isNaN(percentage)) {
+	console.log('Points is ' + currentPoints + ' and max is ' + maxPoints)
         throw new TypeError("Can not calculate percentage from inputs");
     }
 
     // load template for bar type
     if (type == 'badge') {
         const template = require('./template-badge');
-        svg = template(points, percentage, label, styleOptions);
+        svg = template(currentPoints, maxPoints, percentage, label, styleOptions);
     }
     else {
         const template = require('./template-default');
-        svg = template(points, percentage, label, styleOptions);
+        svg = template(currentPoints, maxPoints, percentage, label, styleOptions);
     }
     return svg;
 }
@@ -101,4 +76,4 @@ function writeSVGFile(filePath, svg) {
     }
 }
 
-module.exports = { splitPoints, templateSVG, writeSVGFile }
+module.exports = { templateSVG, writeSVGFile }

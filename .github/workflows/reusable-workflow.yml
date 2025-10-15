@@ -3,9 +3,11 @@ on:
   workflow_call:
     inputs:
       points:
-        description: "Points string separated with a / slash."
+        description: "Obtained points."
         required: true
-        type: string
+      maxPoints:
+        description: "Maximum points."
+        required: true
       path:
         description: "File path to save the generated SVG to."
         required: true
@@ -71,7 +73,7 @@ jobs:
         run: mkdir -p $(dirname ${{ inputs.path }})
 
       - name: Points Bar
-        uses: markpatterson27/points-bar@v1
+        uses: alessandropellegrini/points-bar@main
         with:
           points: ${{ inputs.points }}
           path: ${{ inputs.path }}

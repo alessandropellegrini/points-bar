@@ -3,7 +3,10 @@ description: "Generates a points/progress SVG bar"
 
 inputs:
   points:
-    description: "Points string separated with a / slash."
+    description: "Obtained points."
+    required: true
+  maxPoints:
+    description: "Maximum points."
     required: true
   path:
     description: "File path to save the generated SVG to."

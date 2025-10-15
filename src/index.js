@@ -4,6 +4,7 @@ const pointsbar = require('./pointsbar');
 async function run() {
     try {
         const points = core.getInput("points", {required: true});
+        const maxPoints = core.getInput("maxPoints", {required: true});
         const filepath = core.getInput("path", {required: true});
         const barType = core.getInput("type");
         const barColor = core.getInput("bar-color");
@@ -26,9 +27,7 @@ async function run() {
             style: styleOptions,
         }
 
-        const pointsParts = pointsbar.splitPoints(points);
-
-        const svg = pointsbar.templateSVG(pointsParts[0], pointsParts[1], options);
+        const svg = pointsbar.templateSVG(points, maxPoints, options);
 
         pointsbar.writeSVGFile(filepath, svg);
 

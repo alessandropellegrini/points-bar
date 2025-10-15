@@ -19,29 +19,32 @@ jobs:
       - name: random points
         id: random-points
         run: |
-            points=$((10 + $RANDOM % 80))"/100"
+            points=$((10 + $RANDOM % 80))
             echo "::set-output name=points::$points"
 
       # create points bar
       - name: points bar
-        uses: markpatterson27/points-bar@v1
+        uses: alessandropellegrini/points-bar@main
         with:
           points: ${{ steps.random-points.outputs.points }}
+          maxPoints: '100'
           path: '.github/icons/points-bar.svg'
 
       # create points badge
       - name: points badge
-        uses: markpatterson27/points-bar@v1
+        uses: alessandropellegrini/points-bar@main
         with:
           points: ${{ steps.random-points.outputs.points }}
+          maxPoints: '100'
           path: '.github/icons/points-badge.svg'
           type: 'badge'
 
       # create points bar with custom colors
       - name: points bar color
-        uses: markpatterson27/points-bar@v1
+        uses: alessandropellegrini/points-bar@main
         with:
           points: ${{ steps.random-points.outputs.points }}
+          maxPoints: '100'
           path: '.github/icons/points-bar-color.svg'
           bar-color: 'gold'
           bar-background: '#115544'
@@ -49,34 +52,38 @@ jobs:
 
       # create points bar with custom label
       - name: score bar
-        uses: markpatterson27/points-bar@v1
+        uses: alessandropellegrini/points-bar@main
         with:
           points: ${{ steps.random-points.outputs.points }}
+          maxPoints: '100'
           path: '.github/icons/points-bar-custom-label.svg'
           label: 'Score'
 
       # create points badge with custom label
       - name: autograde badge
-        uses: markpatterson27/points-bar@v1
+        uses: alessandropellegrini/points-bar@main
         with:
           points: ${{ steps.random-points.outputs.points }}
+          maxPoints: '100'
           path: '.github/icons/points-badge-custom-label.svg'
           type: 'badge'
           label: 'Autograde'
 
       # create wide points bar
       - name: wide points bar
-        uses: markpatterson27/points-bar@v1
+        uses: alessandropellegrini/points-bar@main
         with:
           points: ${{ steps.random-points.outputs.points }}
+          maxPoints: '100'
           path: '.github/icons/points-bar-wide.svg'
           width: 220
 
       # create points badge reversed
       - name: points badge reversed
-        uses: markpatterson27/points-bar@v1
+        uses: alessandropellegrini/points-bar@main
         with:
           points: ${{ steps.random-points.outputs.points }}
+          maxPoints: '100'
           path: '.github/icons/points-badge-reversed.svg'
           type: 'badge'
           bar-color: '#11BBCC'

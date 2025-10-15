@@ -1,6 +1,6 @@
 {
   "name": "points-bar",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "A GitHub action that creates an SVG points bar.",
   "main": "src/index.js",
   "directories": {
@@ -13,15 +13,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/markpatterson27/points-bar.git"
+    "url": "git+https://github.com/alessandropellegrini/points-bar.git"
   },
   "keywords": [],
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/markpatterson27/points-bar/issues"
+    "url": "https://github.com/alessandropellegrini/points-bar/issues"
   },
-  "homepage": "https://github.com/markpatterson27/points-bar#readme",
+  "homepage": "https://github.com/alessandropellegrini/points-bar#readme",
   "dependencies": {
     "@actions/core": "^1.10.1"
   },

@@ -42,5 +42,6 @@ jobs:
     - name: action
       uses: ./
       with:
-        points: 50/100
+        points: 50
+        maxPoints: 100
         path: .github/icons/points-bar.svg

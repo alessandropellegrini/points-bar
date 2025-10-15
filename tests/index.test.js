@@ -28,6 +28,7 @@ describe("action interaction", () => {
     // test no points throws setFailed
     test('no points throws error', () => {
         process.env['INPUT_POINTS'] = '';
+        process.env['INPUT_MAXPOINTS'] = '34';
         process.env['INPUT_PATH'] = 'dummy-path/pointsbar.svg';
         action.run();
         expect(core.setFailed).toHaveBeenCalled();
@@ -36,7 +37,8 @@ describe("action interaction", () => {
 
     // test no path throws setFailed
     test('no points throws error', () => {
-        process.env['INPUT_POINTS'] = '12/34';
+        process.env['INPUT_POINTS'] = '12';
+        process.env['INPUT_MAXPOINTS'] = '34';
         process.env['INPUT_PATH'] = '';
         action.run();
         expect(core.setFailed).toHaveBeenCalled();
@@ -46,14 +48,14 @@ describe("action interaction", () => {
     // test invalid points sets error
     const testPoints = [
         // points input, expected error response
-        ['12', 'Points input incorrectly formatted'],
-        ['12 34', 'Points input incorrectly formatted'],
-        ['12/34/56', 'Points input incorrectly formatted'],
-        ['cat/34', 'Points part not a number'],
-        ['12/dog', 'Points part not a number']
+        ['12 34', '34', 'Can not calculate percentage from inputs'],
+        ['12/34/56', '34', 'Can not calculate percentage from inputs'],
+        ['cat/34', '34', 'Can not calculate percentage from inputs'],
+        ['12/dog', '34', 'Can not calculate percentage from inputs']
     ];
-    test.each(testPoints)('invalid points throws error', (points, expected) => {
+    test.each(testPoints)('invalid points throws error', (points, maxPoints, expected) => {
         process.env['INPUT_POINTS'] = points;
+        process.env['INPUT_MAXPOINTS'] = maxPoints;
         process.env['INPUT_PATH'] = 'dummy-path/pointsbar.svg';
         action.run();
         expect(core.setFailed).toHaveBeenCalled();
@@ -67,7 +69,8 @@ describe("action interaction", () => {
         ['!pointsbar[a-z]*\0.svg', 'Error writing SVG file'],
     ];
     test.each(testPaths)('invalid path throws error', (inputPath, expected) => {
-        process.env['INPUT_POINTS'] = '12/34';
+        process.env['INPUT_POINTS'] = '12';
+        process.env['INPUT_MAXPOINTS'] = '34';
         process.env['INPUT_PATH'] = inputPath;
         const expectedRE = new RegExp(expected, 'gi');
         action.run();
@@ -77,9 +80,11 @@ describe("action interaction", () => {
 
     // test valid required inputs create file
     test('valid required inputs create file', () => {
-        const points = '12/34';
+        const points = '12';
+        const maxPoints = '34';
         const svgPath = 'dummy-path/pointsbar.svg'
         process.env['INPUT_POINTS'] = points;
+        process.env['INPUT_MAXPOINTS'] = maxPoints;
         process.env['INPUT_PATH'] = svgPath;
         action.run();
         expect(core.setFailed).not.toHaveBeenCalled();
@@ -89,13 +94,14 @@ describe("action interaction", () => {
         const svgFileContents = fs.readFileSync(svgPath, 'utf-8');
         expect(svgFileContents).toContain(`<svg`);      // file start
         expect(svgFileContents).toContain(`</svg>`);    // file end
-        expect(svgFileContents).toContain(`<title>Points: ${points}</title>`);
+        expect(svgFileContents).toContain(`<title>Points: ${points}/${maxPoints}</title>`);
         expect(svgFileContents).toContain(`<text x="0" y="12">Points</text>`);
     });
 
     // test valid inputs create file
     test('valid inputs create file', () => {
-        const points = '12/34';
+	const points = '12';
+        const maxPoints = '34';
         const svgPath = 'dummy-path/pointsbar.svg'
         const barColor = '#123456';
         const barBackground = '#abcdef';
@@ -103,6 +109,7 @@ describe("action interaction", () => {
         const label = 'Action Test';
         const width = 300;
         process.env['INPUT_POINTS'] = points;
+        process.env['INPUT_MAXPOINTS'] = maxPoints;
         process.env['INPUT_PATH'] = svgPath;
         process.env['INPUT_TYPE'] = 'badge';
         process.env['INPUT_BAR-COLOR'] = barColor;
@@ -119,7 +126,7 @@ describe("action interaction", () => {
         const svgFileContents = fs.readFileSync(svgPath, 'utf-8');
         expect(svgFileContents).toContain(`<svg xmlns="http://www.w3.org/2000/svg" width="${width}px"`);    // file start and width
         expect(svgFileContents).toContain(`</svg>`);    // file end
-        expect(svgFileContents).toContain(`<title>${label}: ${points}</title>`);  // points and label
+        expect(svgFileContents).toContain(`<title>${label}: ${points}/${maxPoints}</title>`);  // points and label
         expect(svgFileContents).toContain(`<text x="5" y="14">${label}</text>`);  // type (and label)
         expect(svgFileContents).toContain(`<rect width="100%" height="100%" fill="${barBackground}"/>`);    // bar background
         expect(svgFileContents).toContain(`<rect width="0%" height="100%" fill="${barColor}" transform="scale(-1,1) translate(-`);  // bar-color and reverse
@@ -129,7 +136,8 @@ describe("action interaction", () => {
 
 // shows how the runner will run a javascript action with env / stdout protocol
 test('test runs', () => {
-  process.env['INPUT_POINTS'] = '12/34';
+  process.env['INPUT_POINTS'] = '12';
+  process.env['INPUT_MAXPOINTS'] = '34';
   process.env['INPUT_PATH'] = '.github/icons/pointsbar.svg';
   // const ip = path.join(__dirname, '..', 'src', 'index.js');
   const ip = 'src/index.js';
